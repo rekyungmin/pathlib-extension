@@ -20,6 +20,10 @@ class Path(pathlib.Path):
         self._init()
         return self
 
+    def with_stem(self, stem: str) -> "Path":
+        """Return a new path with the stem changed."""
+        return self.with_name(stem + self.suffix)
+
 
 class PosixPath(Path, pathlib.PurePosixPath):
     __slots__ = ()
