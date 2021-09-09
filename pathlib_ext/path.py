@@ -24,6 +24,16 @@ class Path(pathlib.Path):
         """Return a new path with the stem changed."""
         return self.with_name(stem + self.suffix)
 
+    def prefix_stem(self, stem: str) -> "Path":
+        """Return a new path with the prefix of stem changed"""
+        new_stem = stem + self.stem
+        return self.with_stem(new_stem)
+
+    def postfix_stem(self, stem: str) -> "Path":
+        """Return a new path with the postfix of stem changed"""
+        new_stem = self.stem + stem
+        return self.with_stem(new_stem)
+
 
 class PosixPath(Path, pathlib.PurePosixPath):
     __slots__ = ()
