@@ -34,6 +34,20 @@ class Path(pathlib.Path):
         new_stem = self.stem + stem
         return self.with_stem(new_stem)
 
+    def _count_changeable_node(self) -> int:
+        if self.drive or self.root:
+            return len(self.parts) - 1
+        else:
+            return len(self.parts)
+
+    def with_parent(self, parent: str) -> "Path":
+        """Return a new path with the parent changed"""
+        if self._count_changeable_node() < 2:
+            raise ValueError(f"{self} has an empty parent")
+
+        new_parts = [*self.parts[:-2], parent, self.parts[-1]]
+        return Path(*new_parts)
+
 
 class PosixPath(Path, pathlib.PurePosixPath):
     __slots__ = ()

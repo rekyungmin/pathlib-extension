@@ -100,3 +100,34 @@ def test_postfix_stem_common(path, stem_postfix, result):
 def test_postfix_stem_raise_error(path, stem_postfix):
     with pytest.raises(ValueError):
         path.postfix_stem(stem_postfix)
+
+
+@pytest.mark.parametrize(
+    "path,parent,result",
+    (
+        (Path("a/b"), "d", Path("d/b")),
+        (Path("/a/b"), "d", Path("/d/b")),
+        (Path("a/b.py"), "d", Path("d/b.py")),
+        (Path("/a/b.py"), "d", Path("/d/b.py")),
+        (Path("a/b"), "", Path("b")),
+        (Path("a/b/c/d/e"), "/z", Path("/z/e")),
+    ),
+)
+def test_with_parent_common(path, parent, result):
+    assert path.with_parent(parent) == result
+
+
+@pytest.mark.parametrize(
+    "path,parent",
+    (
+        (Path(""), "d"),
+        (Path("."), "d"),
+        (Path("/"), "d"),
+        (Path("a"), "d"),
+        (Path("/a"), "d"),
+        (Path("a/"), "d"),
+    ),
+)
+def test_with_parent_raise_error(path, parent):
+    with pytest.raises(ValueError):
+        path.with_parent(parent)
