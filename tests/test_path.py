@@ -131,3 +131,47 @@ def test_with_parent_common(path, parent, result):
 def test_with_parent_raise_error(path, parent):
     with pytest.raises(ValueError):
         path.with_parent(parent)
+
+
+@pytest.mark.parametrize(
+    "path,new_suffix,result",
+    (
+        (Path("b.txt"), ".zip", Path("b.txt.zip")),
+        (Path("/b.txt"), ".zip", Path("/b.txt.zip")),
+        (Path("a/b.tar"), ".gz", Path("a/b.tar.gz")),
+        (Path("/a/b.tar"), ".gz", Path("/a/b.tar.gz")),
+        (Path("a/b.tar"), "", Path("a/b.tar")),
+        (Path("/a/b"), "", Path("/a/b")),
+    ),
+)
+def test_push_suffix_common(path, new_suffix, result):
+    assert path.push_suffix(new_suffix) == result
+
+
+@pytest.mark.parametrize(
+    "path,new_suffix",
+    (
+        (Path(""), ".gz"),
+        (Path("."), ".gz"),
+        (Path("/"), ".gz"),
+        (Path("a/b"), "zip"),
+        (Path("a/b"), "/"),
+        (Path("a/b"), "."),
+        (Path("a/b"), "/.gz"),
+        (Path("a/b"), ".c/.d"),
+        (Path("a/b"), "./.d"),
+        (Path("a/b"), "./.d"),
+        (Path("a/b"), ".d/."),
+        (Path("a/b.gz"), "zip"),
+        (Path("a/b.gz"), "/"),
+        (Path("a/b.gz"), "."),
+        (Path("a/b.gz"), "/.gz"),
+        (Path("a/b.gz"), ".c/.d"),
+        (Path("a/b.gz"), "./.d"),
+        (Path("a/b.gz"), "./.d"),
+        (Path("a/b.gz"), ".d/."),
+    ),
+)
+def test_push_suffix_raise_error(path, new_suffix):
+    with pytest.raises(ValueError):
+        path.push_suffix(new_suffix)

@@ -48,6 +48,10 @@ class Path(pathlib.Path):
         new_parts = [*self.parts[:-2], parent, self.parts[-1]]
         return Path(*new_parts)
 
+    def push_suffix(self, suffix: str) -> "Path":
+        """Return a new path that pushed the new suffix with out removing the old one"""
+        return self.with_suffix(suffix).append_stem(self.suffix)
+
 
 class PosixPath(Path, pathlib.PurePosixPath):
     __slots__ = ()
