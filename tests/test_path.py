@@ -49,8 +49,8 @@ def test_with_stem_raise_error(path, stem):
         (Path("/a/Dot ending."), "d", Path("/a/dDot ending.")),
     ),
 )
-def test_prefix_stem_common(path, stem_prefix, result):
-    assert path.prefix_stem(stem_prefix) == result
+def test_prepend_stem_common(path, stem_prefix, result):
+    assert path.prepend_stem(stem_prefix) == result
 
 
 @pytest.mark.parametrize(
@@ -64,9 +64,9 @@ def test_prefix_stem_common(path, stem_prefix, result):
         (Path("a/b"), "c/d"),
     ),
 )
-def test_prefix_stem_raise_error(path, stem_prefix):
+def test_prepend_stem_raise_error(path, stem_prefix):
     with pytest.raises(ValueError):
-        path.prefix_stem(stem_prefix)
+        path.prepend_stem(stem_prefix)
 
 
 @pytest.mark.parametrize(
@@ -82,8 +82,8 @@ def test_prefix_stem_raise_error(path, stem_prefix):
         (Path("/a/Dot ending."), "d", Path("/a/Dot ending.d")),
     ),
 )
-def test_postfix_stem_common(path, stem_postfix, result):
-    assert path.postfix_stem(stem_postfix) == result
+def test_append_stem_common(path, stem_postfix, result):
+    assert path.append_stem(stem_postfix) == result
 
 
 @pytest.mark.parametrize(
@@ -97,9 +97,9 @@ def test_postfix_stem_common(path, stem_postfix, result):
         (Path("a/b"), "c/d"),
     ),
 )
-def test_postfix_stem_raise_error(path, stem_postfix):
+def test_append_stem_raise_error(path, stem_postfix):
     with pytest.raises(ValueError):
-        path.postfix_stem(stem_postfix)
+        path.append_stem(stem_postfix)
 
 
 @pytest.mark.parametrize(
