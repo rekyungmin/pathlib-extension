@@ -175,3 +175,16 @@ def test_push_suffix_common(path, new_suffix, result):
 def test_push_suffix_raise_error(path, new_suffix):
     with pytest.raises(ValueError):
         path.push_suffix(new_suffix)
+
+
+@pytest.mark.parametrize(
+    "path,result",
+    (
+        (Path("b.txt"), Path("b")),
+        (Path("/b.txt"), Path("/b")),
+        (Path("b."), Path("b.")),
+        (Path("b"), Path("b")),
+    ),
+)
+def test_pop_suffix_common(path, result):
+    assert path.pop_suffix() == result

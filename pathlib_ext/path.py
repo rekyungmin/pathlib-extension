@@ -52,6 +52,9 @@ class Path(pathlib.Path):
         """Return a new path that pushed the new suffix with out removing the old one"""
         return self.with_suffix(suffix).append_stem(self.suffix)
 
+    def pop_suffix(self) -> "Path":
+        return self.with_suffix("")
+
 
 class PosixPath(Path, pathlib.PurePosixPath):
     __slots__ = ()
