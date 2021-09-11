@@ -56,6 +56,20 @@ class PurePath(pathlib.PurePath):
         new_parts = [*parts[:-2], parent, parts[-1]]
         return self._from_parts(new_parts)  # type: ignore[attr-defined]
 
+    def push_parent(self: T, new_parent) -> T:
+        """Return a new path that created a new child node under the lowest parent."""
+        parts = self.parts
+        new_parts = [*parts[:-1], new_parent, self.parts[-1]]
+        return self._from_parts(new_parts)  # type: ignore[attr-defined]
+
+    def pop_parent(self: T) -> T:
+        """Return a new path with the lowest parent removed"""
+        if self._count_changeable_node() < 2:
+            return self
+
+        parts = self.parts
+        return self._from_parsed_parts(self.drive, self.root, [*parts[:-2], parts[-1]])  # type: ignore[attr-defined]
+
     def push_suffix(self: T, suffix: str) -> T:
         """Return a new path that pushed the new suffix with out removing the old one"""
         return self.with_suffix(suffix).append_stem(self.suffix)

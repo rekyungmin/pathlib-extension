@@ -134,6 +134,36 @@ def test_with_parent_raise_error(path, parent):
 
 
 @pytest.mark.parametrize(
+    "path,parent,result",
+    (
+        (Path("a/b"), "d", Path("a/d/b")),
+        (Path("/a/b"), "d", Path("/a/d/b")),
+        (Path("a/b.py"), "d", Path("a/d/b.py")),
+        (Path("/a/b.py"), "d", Path("/a/d/b.py")),
+        (Path("a/b"), "", Path("a/b")),
+        (Path("a/b/c/d/e"), "/z", Path("/z/e")),
+    ),
+)
+def test_push_parent_common(path, parent, result):
+    assert path.push_parent(parent) == result
+
+
+@pytest.mark.parametrize(
+    "path,result",
+    (
+        (Path("a/b"), Path("b")),
+        (Path("/a/b"), Path("/b")),
+        (Path("a/b.py"), Path("b.py")),
+        (Path("/a/b.py"), Path("/b.py")),
+        (Path("b.py"), Path("b.py")),
+        (Path("/b.py"), Path("/b.py")),
+    ),
+)
+def test_pop_parent_common(path, result):
+    assert path.pop_parent() == result
+
+
+@pytest.mark.parametrize(
     "path,new_suffix,result",
     (
         (Path("b.txt"), ".zip", Path("b.txt.zip")),
