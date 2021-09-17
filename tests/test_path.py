@@ -1,5 +1,6 @@
 import os
 import tempfile
+import uuid
 
 import pytest
 
@@ -233,3 +234,21 @@ def test_pop_suffix_common(path, result):
 
 def test_tmpdir():
     assert tempfile.gettempdir() == str(Path.tmpdir())
+
+
+def test_safe_tmpdir():
+    p: Path
+    with Path.safe_tmpdir() as p:
+        assert p.is_dir()
+    assert not p.is_dir()
+
+
+def test_safe_tmpdir_file():
+    p: Path
+    with Path.safe_tmpdir() as p:
+        f = p / str(uuid.uuid4())
+        f.write_text("hello world")
+        assert f.read_text() == "hello world"
+
+    with pytest.raises(FileNotFoundError):
+        f.read_text()

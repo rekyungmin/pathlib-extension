@@ -7,10 +7,11 @@ __all__ = (
     "WindowsPath",
 )
 
+import contextlib
 import os
 import pathlib
 import tempfile
-from typing import TypeVar, Type
+from typing import TypeVar, Type, Optional, AnyStr, Union, Iterator
 
 T = TypeVar("T", bound="PurePath")
 
@@ -98,6 +99,25 @@ class Path(pathlib.Path, PurePath):
     def tmpdir(cls: Type[T]) -> T:
         """Return the name of the directory used for temporary files"""
         return cls(tempfile.gettempdir())
+
+    @classmethod
+    @contextlib.contextmanager
+    def safe_tmpdir(
+        cls: Type[T],
+        suffix: Optional[AnyStr] = None,
+        prefix: Optional[AnyStr] = None,
+        dir: Optional[Union[AnyStr, os.PathLike]] = None,
+    ) -> Iterator[T]:
+        """Creates a temporary directory in the most secure manner possible.
+        On completion of the context or destruction of
+        the temporary directory object the newly created
+        temporary directory and all its contents are
+        removed from the filesystem.
+        """
+        with tempfile.TemporaryDirectory(
+            suffix=suffix, prefix=prefix, dir=dir
+        ) as tmpdirname:
+            yield cls(tmpdirname)
 
 
 class PosixPath(pathlib.PosixPath, Path):
