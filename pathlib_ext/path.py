@@ -81,6 +81,9 @@ class PurePath(pathlib.PurePath):
         return self.with_suffix("")
 
 
+U = TypeVar("U", bound="Path")
+
+
 class Path(pathlib.Path, PurePath):
     __slots__ = ()
 
@@ -96,18 +99,18 @@ class Path(pathlib.Path, PurePath):
         return self
 
     @classmethod
-    def tmpdir(cls: Type[T]) -> T:
+    def tmpdir(cls: Type[U]) -> U:
         """Return the name of the directory used for temporary files"""
         return cls(tempfile.gettempdir())
 
     @classmethod
     @contextlib.contextmanager
     def safe_tmpdir(
-        cls: Type[T],
+        cls: Type[U],
         suffix: Optional[AnyStr] = None,
         prefix: Optional[AnyStr] = None,
         dir: Optional[Union[AnyStr, os.PathLike]] = None,
-    ) -> Iterator[T]:
+    ) -> Iterator[U]:
         """Creates a temporary directory in the most secure manner possible.
         On completion of the context or destruction of
         the temporary directory object the newly created
@@ -134,6 +137,3 @@ class PureWindowsPath(pathlib.PureWindowsPath, PurePath):
 
 class PurePosixPath(pathlib.PurePosixPath, PurePath):
     __slots__ = ()
-
-
-print(Path.tmpdir())
