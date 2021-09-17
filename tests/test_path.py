@@ -1,4 +1,5 @@
 import os
+import tempfile
 
 import pytest
 
@@ -228,3 +229,7 @@ def test_push_suffix_raise_error(path, new_suffix):
 )
 def test_pop_suffix_common(path, result):
     assert path.pop_suffix() == result
+
+
+def test_tmpdir():
+    assert tempfile.gettempdir() == str(Path.tmpdir())

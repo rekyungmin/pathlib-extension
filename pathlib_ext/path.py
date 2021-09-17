@@ -9,7 +9,8 @@ __all__ = (
 
 import os
 import pathlib
-from typing import TypeVar
+import tempfile
+from typing import TypeVar, Type
 
 T = TypeVar("T", bound="PurePath")
 
@@ -93,6 +94,11 @@ class Path(pathlib.Path, PurePath):
         self._init()
         return self
 
+    @classmethod
+    def tmpdir(cls: Type[T]) -> T:
+        """Return the name of the directory used for temporary files"""
+        return cls(tempfile.gettempdir())
+
 
 class PosixPath(pathlib.PosixPath, Path):
     __slots__ = ()
@@ -108,3 +114,6 @@ class PureWindowsPath(pathlib.PureWindowsPath, PurePath):
 
 class PurePosixPath(pathlib.PurePosixPath, PurePath):
     __slots__ = ()
+
+
+print(Path.tmpdir())
