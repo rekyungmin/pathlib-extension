@@ -19,7 +19,7 @@ T = TypeVar("T", bound="PurePath")
 class PurePath(pathlib.PurePath):
     __slots__ = ()
 
-    def __new__(cls, *args):
+    def __new__(cls, *args) -> "PurePath":
         """Construct a PurePath from one or several strings and or existing
         PurePath objects.  The strings and path objects are combined so as
         to yield a canonicalized path, which is incorporated into the
@@ -27,7 +27,7 @@ class PurePath(pathlib.PurePath):
         """
         if cls is PurePath:
             cls = PureWindowsPath if os.name == "nt" else PurePosixPath
-        return cls._from_parts(args)
+        return cls._from_parts(args)  # type: ignore[attr-defined]
 
     def with_stem(self: T, stem: str) -> T:
         """Return a new path with the stem changed."""
@@ -87,10 +87,10 @@ U = TypeVar("U", bound="Path")
 class Path(pathlib.Path, PurePath):
     __slots__ = ()
 
-    def __new__(cls, *args, **kwargs):
+    def __new__(cls, *args, **kwargs) -> "Path":
         if cls is Path:
             cls = WindowsPath if os.name == "nt" else PosixPath
-        self = cls._from_parts(args, init=False)
+        self = cls._from_parts(args, init=False)  # type: ignore[attr-defined]
         if not self._flavour.is_supported:
             raise NotImplementedError(
                 "cannot instantiate %r on your system" % (cls.__name__,)
