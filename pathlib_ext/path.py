@@ -79,7 +79,7 @@ class PurePath(pathlib.PurePath):
         return self.with_suffix("")
 
 
-class Path(PurePath):
+class Path(pathlib.Path, PurePath):
     __slots__ = ()
 
     def __new__(cls, *args, **kwargs):
@@ -94,26 +94,17 @@ class Path(PurePath):
         return self
 
 
-class PosixPath(Path, pathlib.PurePosixPath):
+class PosixPath(pathlib.PosixPath, Path):
     __slots__ = ()
 
 
-class WindowsPath(Path, pathlib.PureWindowsPath):
-    __slots__ = ()
-
-    def is_mount(self):
-        raise NotImplementedError("Path.is_mount() is unsupported on this system")
-
-
-_windows_flavour = pathlib._WindowsFlavour()  # type: ignore[attr-defined]
-_posix_flavour = pathlib._PosixFlavour()  # type: ignore[attr-defined]
-
-
-class PureWindowsPath(PurePath):
-    _flavour = _windows_flavour
+class WindowsPath(pathlib.WindowsPath, Path):
     __slots__ = ()
 
 
-class PurePosixPath(PurePath):
-    _flavour = _posix_flavour
+class PureWindowsPath(pathlib.PureWindowsPath, PurePath):
+    __slots__ = ()
+
+
+class PurePosixPath(pathlib.PurePosixPath, PurePath):
     __slots__ = ()
