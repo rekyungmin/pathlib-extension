@@ -1,13 +1,10 @@
-all:
-	black .
-	mypy pathlib_ext/
-	pytest tests/
-
 format:
-	black .
+	poetry run black pathlib_ext/ tests/
 
 type:
-	mypy pathlib-ext/
+	poetry run mypy pathlib_ext/
 
 test:
-	pytest tests/
+	poetry run pytest --cov-report term-missing:skip-covered --cov=pathlib_ext tests/
+
+all: format type test
