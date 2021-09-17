@@ -1,6 +1,16 @@
+import os
+
 import pytest
 
-from pathlib_ext.path import PurePath
+from pathlib_ext.path import PurePath, Path
+
+
+def test_path_raise_error():
+    os_name = os.name
+    os.name = "posix" if os.name == "nt" else "nt"
+    with pytest.raises(NotImplementedError):
+        Path("")
+    os.name = os_name
 
 
 @pytest.mark.parametrize(
